@@ -186,3 +186,17 @@ class TaskPrompts():
             
             Provide metrics and improvement suggestions.
         """)
+
+    def analyze_improvements():
+        return dedent("""
+            Analyze the project for potential improvements.
+            
+            Steps to follow:
+            1. Review code quality
+            2. Identify performance bottlenecks
+            3. Check for security vulnerabilities
+            4. Evaluate user experience
+            5. Update dependencies
+            
+            Provide a detailed report with suggestions for enhancements.
+        """)

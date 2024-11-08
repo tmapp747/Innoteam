@@ -184,6 +184,20 @@ class ModernWebsiteCrew():
             ]
         )
 
+    def analyze_improvements(self):
+        analyze_task = Task(
+            description=TaskPrompts.analyze_improvements(),
+            agent=self.idea_analyst
+        )
+        crew = Crew(
+            agents=[self.idea_analyst],
+            tasks=[analyze_task],
+            verbose=True
+        )
+        analysis_report = crew.kickoff()
+        self.__log_conversation(crew)
+        return analysis_report
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -208,6 +222,33 @@ def generate():
         
         return jsonify({
             "message": result,
+            "conversation_log": crew.conversation_log
+        })
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    try:
+        idea = request.form['idea']
+        llm = request.form.get('llm', None)
+        api_key = request.form.get('api_key', None)
+
+        # Handle new models
+        if llm == 'claude':
+            llm = Claude(api_key=api_key)
+        elif llm == 'sonnet':
+            llm = Sonnet(api_key=api_key)
+        elif llm == 'deepseek':
+            llm = DeepSeek(api_key=api_key)
+
+        crew = ModernWebsiteCrew(idea, llm)
+        analysis_report = crew.analyze_improvements()
+        
+        return jsonify({
+            "analysis_report": analysis_report,
             "conversation_log": crew.conversation_log
         })
     except Exception as e:
