@@ -12,10 +12,15 @@ from tools.file_tools import FileTools
 from tools.search_tools import SearchTools
 from tools.template_tools import TemplateTools
 
+from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+
 class LandingPageCrew():
-  def __init__(self, idea):
+  def __init__(self, idea, llm=None):
     self.agents_config = json.loads(open("config/agents.json", "r").read())
     self.idea = idea
+    self.llm = llm
     self.__create_agents()
 
   def run(self):
@@ -112,6 +117,7 @@ class LandingPageCrew():
     self.idea_analyst = Agent(
       **idea_analyst_config,
       verbose=True,
+      llm=self.llm,
       tools=[
         SearchTools.search_internet,
         BrowserTools.scrape_and_summarize_kwebsite
@@ -121,6 +127,7 @@ class LandingPageCrew():
     self.communications_strategist = Agent(
       **strategist_config,
       verbose=True,
+      llm=self.llm,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_kwebsite,
@@ -130,6 +137,7 @@ class LandingPageCrew():
     self.react_developer = Agent(
       **developer_config,
       verbose=True,
+      llm=self.llm,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_kwebsite,
@@ -141,57 +149,24 @@ class LandingPageCrew():
 
     self.content_editor_agent = Agent(
       **editor_config,
+      llm=self.llm,
       tools=[
           SearchTools.search_internet,
           BrowserTools.scrape_and_summarize_kwebsite,
       ]
     )
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    idea = request.form['idea']
+    llm = request.form.get('llm', None)
+    crew = LandingPageCrew(idea, llm)
+    crew.run()
+    return jsonify({"message": "Landing page generated successfully!"})
+
 if __name__ == "__main__":
-  print("Welcome to Idea Generator")
-  print(dedent("""
-  ! YOU MUST FORK THIS BEFORE USING IT !
-  """))
-
-  print(dedent("""
-      Disclaimer: This will use gpt-4 unless you changed it 
-      not to, and by doing so it will cost you money (~2-9 USD).
-      The full run might take around ~10-45m. Enjoy your time back.\n\n
-    """
-  ))
-  idea = input("# Describe what is your idea:\n\n")
-  
-  if not os.path.exists("./workdir"):
-    os.mkdir("./workdir")
-
-  if len(os.listdir("./templates")) == 0:
-    print(
-      dedent("""
-      !!! NO TEMPLATES FOUND !!!
-      ! YOU MUST FORK THIS BEFORE USING IT !
-      
-      Templates are not inlcuded as they are Tailwind templates. 
-      Place Tailwind individual template folders in `./templates`, 
-      if you have a lincese you can download them at
-      https://tailwindui.com/templates, their references are at
-      `config/templates.json`.
-      
-      This was not tested this with other templates, 
-      prompts in `tasks.py` might require some changes 
-      for that to work.
-      
-      !!! STOPPING EXECUTION !!!
-      """)
-    )
-    exit()
-
-  crew = LandingPageCrew(idea)
-  crew.run()
-  zip_file = "workdir"
-  shutil.make_archive(zip_file, 'zip', 'workdir')
-  shutil.rmtree('workdir')
-  print("\n\n")
-  print("==========================================")
-  print("DONE!")
-  print(f"You can download the project at ./{zip_file}.zip")
-  print("==========================================")
+  app.run(debug=True)
