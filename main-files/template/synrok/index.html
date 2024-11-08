@@ -77,6 +77,16 @@
           </div>
         </div>
 
+        <!-- Add conversation log section -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Conversation Log</h5>
+            <div id="conversation-log" class="conversation-log" style="max-height: 300px; overflow-y: auto;">
+              <!-- Conversation messages will be appended here -->
+            </div>
+          </div>
+        </div>
+
        </div>
      <!--end to page content-->
 
@@ -91,5 +101,29 @@
 
     <script src="assets/js/loader.js"></script>
    
+    <!-- Add script to handle conversation log display -->
+    <script>
+      document.getElementById('model-selection-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        fetch('/generate', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          const conversationLog = document.getElementById('conversation-log');
+          conversationLog.innerHTML = '';
+          data.conversation_log.forEach(log => {
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry');
+            logEntry.innerHTML = `<strong>${log.agent} (${log.role})</strong> [${log.timestamp}]: ${log.message}`;
+            conversationLog.appendChild(logEntry);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    </script>
+
   </body>
 </html>

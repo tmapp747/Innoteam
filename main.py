@@ -24,6 +24,7 @@ class LandingPageCrew():
     self.agents_config = json.loads(open("config/agents.json", "r").read())
     self.idea = idea
     self.llm = llm
+    self.conversation_log = []  # Add a conversation log
     self.__create_agents()
 
   def run(self):
@@ -46,6 +47,7 @@ class LandingPageCrew():
       verbose=True
     )
     expanded_idea = crew.kickoff()
+    self.__log_conversation(crew)  # Log the conversation
     return expanded_idea
 
   def __choose_template(self, expanded_idea):
@@ -67,6 +69,7 @@ class LandingPageCrew():
       verbose=True
     )
     components = crew.kickoff()
+    self.__log_conversation(crew)  # Log the conversation
     return components
 
   def __update_components(self, components, expanded_idea):
@@ -105,6 +108,17 @@ class LandingPageCrew():
         verbose=True
       )
       crew.kickoff()
+      self.__log_conversation(crew)  # Log the conversation
+
+  def __log_conversation(self, crew):
+    for task in crew.tasks:
+      for message in task.messages:
+        self.conversation_log.append({
+          "agent": message.agent.name,
+          "role": message.agent.role,
+          "timestamp": message.timestamp,
+          "message": message.content
+        })
 
   def __create_agents(self):
     idea_analyst_config = self.agents_config["senior_idea_analyst"]
@@ -179,7 +193,10 @@ def generate():
 
     crew = LandingPageCrew(idea, llm)
     crew.run()
-    return jsonify({"message": "Landing page generated successfully!"})
+    return jsonify({
+        "message": "Landing page generated successfully!",
+        "conversation_log": crew.conversation_log  # Pass the conversation log to the UI
+    })
 
 if __name__ == "__main__":
   app.run(debug=True)
