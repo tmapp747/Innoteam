@@ -87,6 +87,30 @@
           </div>
         </div>
 
+        <!-- Add chat interface section -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Chat Interface</h5>
+            <div id="chat-interface" class="chat-interface" style="max-height: 300px; overflow-y: auto;">
+              <!-- Chat messages will be appended here -->
+            </div>
+            <div class="input-group mt-3">
+              <input type="text" class="form-control" id="chat-input" placeholder="Type a message...">
+              <button class="btn btn-dark" id="send-chat">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add collapsible conversation sections -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Collapsible Conversation Sections</h5>
+            <div id="collapsible-sections" class="accordion" style="max-height: 300px; overflow-y: auto;">
+              <!-- Collapsible sections will be appended here -->
+            </div>
+          </div>
+        </div>
+
        </div>
      <!--end to page content-->
 
@@ -120,8 +144,60 @@
             logEntry.innerHTML = `<strong>${log.agent} (${log.role})</strong> [${log.timestamp}]: ${log.message}`;
             conversationLog.appendChild(logEntry);
           });
+
+          // Update chat interface
+          const chatInterface = document.getElementById('chat-interface');
+          chatInterface.innerHTML = '';
+          data.conversation_log.forEach(log => {
+            const chatMessage = document.createElement('div');
+            chatMessage.classList.add('chat-message');
+            chatMessage.innerHTML = `<strong>${log.agent} (${log.role})</strong>: ${log.message}`;
+            chatInterface.appendChild(chatMessage);
+          });
+
+          // Update collapsible sections
+          const collapsibleSections = document.getElementById('collapsible-sections');
+          collapsibleSections.innerHTML = '';
+          const tasks = {};
+          data.conversation_log.forEach(log => {
+            if (!tasks[log.task]) {
+              tasks[log.task] = [];
+            }
+            tasks[log.task].push(log);
+          });
+          Object.keys(tasks).forEach(task => {
+            const section = document.createElement('div');
+            section.classList.add('accordion-item');
+            section.innerHTML = `
+              <h2 class="accordion-header" id="heading-${task}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${task}" aria-expanded="true" aria-controls="collapse-${task}">
+                  ${task}
+                </button>
+              </h2>
+              <div id="collapse-${task}" class="accordion-collapse collapse show" aria-labelledby="heading-${task}" data-bs-parent="#collapsible-sections">
+                <div class="accordion-body">
+                  ${tasks[task].map(log => `<strong>${log.agent} (${log.role})</strong>: ${log.message}`).join('<br>')}
+                </div>
+              </div>
+            `;
+            collapsibleSections.appendChild(section);
+          });
         })
         .catch(error => console.error('Error:', error));
+      });
+
+      // Handle chat input
+      document.getElementById('send-chat').addEventListener('click', function() {
+        const chatInput = document.getElementById('chat-input');
+        const message = chatInput.value;
+        if (message.trim() !== '') {
+          const chatInterface = document.getElementById('chat-interface');
+          const chatMessage = document.createElement('div');
+          chatMessage.classList.add('chat-message');
+          chatMessage.innerHTML = `<strong>User</strong>: ${message}`;
+          chatInterface.appendChild(chatMessage);
+          chatInput.value = '';
+        }
       });
     </script>
 
