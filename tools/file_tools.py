@@ -52,3 +52,32 @@ class FileTools():
       return "File content is valid."
     except Exception:
       return "Error with the input format for the tool."
+
+  @tool("Debug Errors")
+  def debug_errors(data):
+    """Useful to check for possible errors in the code and debug them to ensure the application runs smoothly.
+       The input to this tool should be a pipe (|) separated text of length two, representing
+       the full path of the file and the content to be debugged.
+       For example, `./workdir/template/src/components/Hero.jsx|CONTENT_TO_BE_DEBUGGED`.
+       Replace CONTENT_TO_BE_DEBUGGED with the actual content you want to debug."""
+    try:
+      path, content = data.split("|")
+      path = path.replace("\n", "").replace(" ", "").replace("`", "")
+      if not path.startswith("./workdir"):
+        path = f"./workdir/{path}"
+      
+      # Perform debugging checks
+      if not content:
+        return "Error: Content is empty."
+      if "import" not in content:
+        return "Error: Missing import statements."
+      if "export function" not in content:
+        return "Error: Missing export function."
+      if "'use client'" not in content:
+        return "Error: Missing 'use client' directive."
+      if "href='#'" not in content:
+        return "Error: Missing href='#' in links or buttons."
+      
+      return "File content is debugged and valid."
+    except Exception:
+      return "Error with the input format for the tool."

@@ -207,3 +207,25 @@ class TaskPrompts():
 
       You'll get a $100 tip if you follow all the rules!
     """)
+
+  def debug_errors():
+    return dedent("""
+      Check for possible errors in the code and debug them 
+      to ensure the application runs smoothly. Provide a 
+      detailed report of the errors found and the steps 
+      taken to resolve them.
+
+      Your final answer should be a confirmation that the 
+      code is error-free and the application runs smoothly, 
+      or provide necessary corrections.
+
+      RULES
+      -----
+      - Ensure the code is free of syntax errors.
+      - Check for logical errors and correct them.
+      - Ensure the application runs without any issues.
+      - Provide a detailed report of the errors found and 
+        the steps taken to resolve them.
+
+      You'll get a $100 tip if you follow all the rules!
+    """)
