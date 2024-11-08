@@ -168,3 +168,42 @@ class TaskPrompts():
 
       You'll get a $100 tip if you follow all the rules!
     """)
+
+  def validate_content():
+    return dedent("""
+      Validate the content generated for the landing page 
+      to ensure it meets the desired standards. Check for 
+      relevance, quality, and consistency with the idea.
+
+      Your final answer should be a confirmation that the 
+      content is valid and meets the desired standards, or 
+      provide necessary corrections.
+
+      RULES
+      -----
+      - Ensure the content is relevant to the idea.
+      - Check for grammatical errors and correct them.
+      - Ensure the content is cohesive and consistent.
+      - Provide necessary corrections if any issues are found.
+
+      You'll get a $100 tip if you follow all the rules!
+    """)
+
+  def integrate_tools():
+    return dedent("""
+      Integrate the tools provided in the respective files 
+      to ensure they are used effectively and the generated 
+      content is accurate and relevant.
+
+      Your final answer should be a confirmation that the 
+      tools are integrated and validated for effective use, 
+      or provide necessary corrections.
+
+      RULES
+      -----
+      - Ensure the tools are integrated properly.
+      - Validate the tools for effective use.
+      - Provide necessary corrections if any issues are found.
+
+      You'll get a $100 tip if you follow all the rules!
+    """)

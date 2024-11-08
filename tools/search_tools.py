@@ -26,3 +26,19 @@ class SearchTools():
       ]))
 
     return '\n'.join(stirng)
+
+  @tool("Validate Search Results")
+  def validate_search_results(data):
+    """Useful to validate the search results to ensure they are relevant and accurate.
+       The input to this tool should be a JSON string representing the search results.
+       For example, `{"results": [{"title": "Example Title", "link": "http://example.com", "snippet": "Example snippet."}]}`."""
+    try:
+      results = json.loads(data)
+      if not results.get("results"):
+        return "Error: No search results found."
+      for result in results["results"]:
+        if not result.get("title") or not result.get("link") or not result.get("snippet"):
+          return "Error: Missing title, link, or snippet in search results."
+      return "Search results are valid."
+    except Exception:
+      return "Error with the input format for the tool."
