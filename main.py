@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 from textwrap import dedent
 
 from crewai import Agent, Crew, Task
@@ -10,7 +9,6 @@ from tasks import TaskPrompts
 from tools.browser_tools import BrowserTools
 from tools.file_tools import FileTools
 from tools.search_tools import SearchTools
-from tools.template_tools import TemplateTools
 
 from flask import Flask, render_template, request, jsonify
 
@@ -19,159 +17,172 @@ from langchain.llms import Claude, Sonnet, DeepSeek
 
 app = Flask(__name__)
 
-class LandingPageCrew():
-  def __init__(self, idea, llm=None):
-    self.agents_config = json.loads(open("config/agents.json", "r").read())
-    self.idea = idea
-    self.llm = llm
-    self.conversation_log = []  # Add a conversation log
-    self.__create_agents()
+class ModernWebsiteCrew():
+    def __init__(self, idea, llm=None):
+        self.agents_config = json.loads(open("config/agents.json", "r").read())
+        self.idea = idea
+        self.llm = llm
+        self.conversation_log = []
+        self.__create_agents()
 
-  def run(self):
-    expanded_idea = self.__expand_idea()
-    components = self.__choose_template(expanded_idea)
-    self.__update_components(components, expanded_idea)
+    def run(self):
+        expanded_idea = self.__expand_idea()
+        self.__setup_project()
+        self.__create_website(expanded_idea)
+        return "Website generated successfully!"
 
-  def __expand_idea(self):
-    expand_idea_task = Task(
-      description=TaskPrompts.expand().format(idea=self.idea),
-      agent=self.idea_analyst
-    )
-    refine_idea_task = Task(
-      description=TaskPrompts.refine_idea(),
-      agent=self.communications_strategist
-    )
-    crew = Crew(
-      agents=[self.idea_analyst, self.communications_strategist],
-      tasks=[expand_idea_task, refine_idea_task],
-      verbose=True
-    )
-    expanded_idea = crew.kickoff()
-    self.__log_conversation(crew)  # Log the conversation
-    return expanded_idea
+    def __expand_idea(self):
+        expand_idea_task = Task(
+            description=TaskPrompts.expand().format(idea=self.idea),
+            agent=self.idea_analyst
+        )
+        refine_idea_task = Task(
+            description=TaskPrompts.refine_idea(),
+            agent=self.communications_strategist
+        )
+        crew = Crew(
+            agents=[self.idea_analyst, self.communications_strategist],
+            tasks=[expand_idea_task, refine_idea_task],
+            verbose=True
+        )
+        expanded_idea = crew.kickoff()
+        self.__log_conversation(crew)
+        return expanded_idea
 
-  def __choose_template(self, expanded_idea):
-    choose_tempalte_taks = Task(
-        description=TaskPrompts.choose_template().format(
-          idea=self.idea
-        ),
-        agent=self.react_developer
-    )
-    update_page = Task(
-      description=TaskPrompts.update_page().format(
-        idea=self.idea
-      ),
-      agent=self.react_developer
-    )
-    crew = Crew(
-      agents=[self.react_developer],
-      tasks=[choose_tempalte_taks, update_page],
-      verbose=True
-    )
-    components = crew.kickoff()
-    self.__log_conversation(crew)  # Log the conversation
-    return components
+    def __setup_project(self):
+        setup_task = Task(
+            description="""
+            Set up a modern web development project with the following requirements:
+            1. Use Next.js 14 with App Router
+            2. Implement Shadcn UI for beautiful components
+            3. Use Tailwind CSS for styling
+            4. Ensure responsive design
+            5. Set up proper project structure with components, layouts, and pages
+            6. Initialize git repository
+            7. Set up proper TypeScript configuration
+            
+            Create the project in the 'website' directory.
+            """,
+            agent=self.web_developer
+        )
+        crew = Crew(
+            agents=[self.web_developer],
+            tasks=[setup_task],
+            verbose=True
+        )
+        crew.kickoff()
+        self.__log_conversation(crew)
 
-  def __update_components(self, components, expanded_idea):
-    components = components.replace("\n", "").replace(" ",
-                                                      "").replace("```", "")
-    components = json.loads(components)
-    for component in components:
-      file_content = open(
-        f"./workdir/{component.split('./')[-1]}",
-        "r"
-      ).read()
-      create_content = Task(
-        description=TaskPrompts.component_content().format(
-          expanded_idea=expanded_idea,
-          file_content=file_content,
-          component=component
-        ),
-        agent=self.content_editor_agent
-      )
-      update_component = Task(
-        description=TaskPrompts.update_component().format(
-          component=component,
-          file_content=file_content
-        ),
-        agent=self.react_developer
-      )
-      qa_component = Task(
-        description=TaskPrompts.qa_component().format(
-          component=component
-        ),
-        agent=self.react_developer
-      )
-      crew = Crew(
-        agents=[self.content_editor_agent, self.react_developer],
-        tasks=[create_content, update_component, qa_component],
-        verbose=True
-      )
-      crew.kickoff()
-      self.__log_conversation(crew)  # Log the conversation
+    def __create_website(self, expanded_idea):
+        create_components_task = Task(
+            description=f"""
+            Create modern, responsive website components based on the expanded idea:
+            {expanded_idea}
+            
+            Requirements:
+            1. Use Shadcn UI components
+            2. Implement responsive design with Tailwind CSS
+            3. Create reusable components
+            4. Implement modern animations and transitions
+            5. Ensure accessibility
+            6. Add dark mode support
+            7. Optimize for performance
+            
+            Components needed:
+            - Hero section
+            - Features section
+            - About section
+            - Contact form
+            - Navigation
+            - Footer
+            """,
+            agent=self.web_developer
+        )
+        
+        create_content_task = Task(
+            description=f"""
+            Create compelling content for the website based on the expanded idea:
+            {expanded_idea}
+            
+            Requirements:
+            1. Write clear, engaging headlines
+            2. Create persuasive call-to-actions
+            3. Write concise feature descriptions
+            4. Ensure consistent tone and voice
+            5. Optimize for readability
+            6. Include SEO-friendly content
+            """,
+            agent=self.content_editor
+        )
+        
+        crew = Crew(
+            agents=[self.web_developer, self.content_editor],
+            tasks=[create_components_task, create_content_task],
+            verbose=True
+        )
+        crew.kickoff()
+        self.__log_conversation(crew)
 
-  def __log_conversation(self, crew):
-    for task in crew.tasks:
-      for message in task.messages:
-        self.conversation_log.append({
-          "agent": message.agent.name,
-          "role": message.agent.role,
-          "timestamp": message.timestamp,
-          "message": message.content
-        })
+    def __log_conversation(self, crew):
+        for task in crew.tasks:
+            for message in task.messages:
+                self.conversation_log.append({
+                    "agent": message.agent.name,
+                    "role": message.agent.role,
+                    "timestamp": message.timestamp,
+                    "message": message.content
+                })
 
-  def __create_agents(self):
-    idea_analyst_config = self.agents_config["senior_idea_analyst"]
-    strategist_config = self.agents_config["senior_strategist"]
-    developer_config = self.agents_config["senior_react_engineer"]
-    editor_config = self.agents_config["senior_content_editor"]
+    def __create_agents(self):
+        idea_analyst_config = self.agents_config["senior_idea_analyst"]
+        strategist_config = self.agents_config["senior_strategist"]
+        developer_config = self.agents_config["senior_react_engineer"]
+        editor_config = self.agents_config["senior_content_editor"]
 
-    toolkit = FileManagementToolkit(
-      root_dir='workdir',
-      selected_tools=["read_file", "list_directory"]
-    )
+        toolkit = FileManagementToolkit(
+            root_dir='website',
+            selected_tools=["read_file", "list_directory", "write_file"]
+        )
 
-    self.idea_analyst = Agent(
-      **idea_analyst_config,
-      verbose=True,
-      llm=self.llm,
-      tools=[
-        SearchTools.search_internet,
-        BrowserTools.scrape_and_summarize_kwebsite
-      ]
-    )
+        self.idea_analyst = Agent(
+            **idea_analyst_config,
+            verbose=True,
+            llm=self.llm,
+            tools=[
+                SearchTools.search_internet,
+                BrowserTools.scrape_and_summarize_kwebsite
+            ]
+        )
 
-    self.communications_strategist = Agent(
-      **strategist_config,
-      verbose=True,
-      llm=self.llm,
-      tools=[
-          SearchTools.search_internet,
-          BrowserTools.scrape_and_summarize_kwebsite,
-      ]
-    )
+        self.communications_strategist = Agent(
+            **strategist_config,
+            verbose=True,
+            llm=self.llm,
+            tools=[
+                SearchTools.search_internet,
+                BrowserTools.scrape_and_summarize_kwebsite,
+            ]
+        )
 
-    self.react_developer = Agent(
-      **developer_config,
-      verbose=True,
-      llm=self.llm,
-      tools=[
-          SearchTools.search_internet,
-          BrowserTools.scrape_and_summarize_kwebsite,
-          TemplateTools.learn_landing_page_options,
-          TemplateTools.copy_landing_page_template_to_project_folder,
-          FileTools.write_file
-      ] + toolkit.get_tools()
-    )
+        self.web_developer = Agent(
+            **developer_config,
+            verbose=True,
+            llm=self.llm,
+            tools=[
+                SearchTools.search_internet,
+                BrowserTools.scrape_and_summarize_kwebsite,
+                FileTools.write_file
+            ] + toolkit.get_tools()
+        )
 
-    self.content_editor_agent = Agent(
-      **editor_config,
-      llm=self.llm,
-      tools=[
-          SearchTools.search_internet,
-          BrowserTools.scrape_and_summarize_kwebsite,
-      ]
-    )
+        self.content_editor = Agent(
+            **editor_config,
+            llm=self.llm,
+            tools=[
+                SearchTools.search_internet,
+                BrowserTools.scrape_and_summarize_kwebsite,
+            ]
+        )
 
 @app.route('/')
 def index():
@@ -179,24 +190,30 @@ def index():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    idea = request.form['idea']
-    llm = request.form.get('llm', None)
-    api_key = request.form.get('api_key', None)
+    try:
+        idea = request.form['idea']
+        llm = request.form.get('llm', None)
+        api_key = request.form.get('api_key', None)
 
-    # Handle new models
-    if llm == 'claude':
-        llm = Claude(api_key=api_key)
-    elif llm == 'sonnet':
-        llm = Sonnet(api_key=api_key)
-    elif llm == 'deepseek':
-        llm = DeepSeek(api_key=api_key)
+        # Handle new models
+        if llm == 'claude':
+            llm = Claude(api_key=api_key)
+        elif llm == 'sonnet':
+            llm = Sonnet(api_key=api_key)
+        elif llm == 'deepseek':
+            llm = DeepSeek(api_key=api_key)
 
-    crew = LandingPageCrew(idea, llm)
-    crew.run()
-    return jsonify({
-        "message": "Landing page generated successfully!",
-        "conversation_log": crew.conversation_log  # Pass the conversation log to the UI
-    })
+        crew = ModernWebsiteCrew(idea, llm)
+        result = crew.run()
+        
+        return jsonify({
+            "message": result,
+            "conversation_log": crew.conversation_log
+        })
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)
