@@ -14,6 +14,9 @@ from tools.template_tools import TemplateTools
 
 from flask import Flask, render_template, request, jsonify
 
+# Add imports for Claude 3.5, Sonnet, and Deep Seek models
+from langchain.llms import Claude, Sonnet, DeepSeek
+
 app = Flask(__name__)
 
 class LandingPageCrew():
@@ -164,6 +167,16 @@ def index():
 def generate():
     idea = request.form['idea']
     llm = request.form.get('llm', None)
+    api_key = request.form.get('api_key', None)
+
+    # Handle new models
+    if llm == 'claude':
+        llm = Claude(api_key=api_key)
+    elif llm == 'sonnet':
+        llm = Sonnet(api_key=api_key)
+    elif llm == 'deepseek':
+        llm = DeepSeek(api_key=api_key)
+
     crew = LandingPageCrew(idea, llm)
     crew.run()
     return jsonify({"message": "Landing page generated successfully!"})

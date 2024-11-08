@@ -50,6 +50,33 @@
           </div>
         </div>
 
+        <!-- Add form for selecting models and entering API keys -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <form id="model-selection-form" method="POST" action="/generate">
+              <div class="mb-3">
+                <label for="idea" class="form-label">Idea</label>
+                <input type="text" class="form-control" id="idea" name="idea" required>
+              </div>
+              <div class="mb-3">
+                <label for="llm" class="form-label">Select Model</label>
+                <select class="form-select" id="llm" name="llm" required>
+                  <option value="claude">Claude 3.5</option>
+                  <option value="sonnet">Sonnet</option>
+                  <option value="deepseek">Deep Seek</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="api_key" class="form-label">API Key</label>
+                <input type="text" class="form-control" id="api_key" name="api_key" required>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-ecomm rounded-3">Generate</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
        </div>
      <!--end to page content-->
 
