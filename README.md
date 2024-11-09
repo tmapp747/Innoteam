@@ -1,175 +1,175 @@
-# AI Crew for Landing Pages
+# Innoteam Website Generator
 
-## Introduction
-This project is an example using the CrewAI framework to automate the process of creating landing pages from a single idea. CrewAI orchestrates autonomous AI agents, enabling them to collaborate and execute complex tasks efficiently.
+A modern web application that generates websites using AI-powered agents and modern web technologies.
 
-*Disclaimer: Templates are not included as they are Tailwind templates. Place Tailwind individual template folders in `./templates`, if you have a license you can download them at (https://tailwindui.com/templates), their references are at `config/templates.json`, this was not tested with other templates, prompts in `tasks.py` might require some changes for that to work.*
+## Features
 
-By [@joaomdmoura](https://x.com/joaomdmoura)
+- **AI-Powered Website Generation**
+  - Multiple LLM support (Claude, Sonnet, DeepSeek)
+  - Intelligent idea expansion and refinement
+  - Modern component generation using Next.js and Shadcn UI
+  - SEO-optimized content creation
 
-## Table of Contents
-- [Quick Start Guide](#quick-start-guide)
-- [Detailed Setup Instructions](#detailed-setup-instructions)
-- [CrewAI Framework](#crewai-framework)
-- [Running the Script](#running-the-script)
-- [CI/CD Pipeline](#ci-cd-pipeline)
-- [Deployment Guide](#deployment-guide)
-- [Project Structure](#project-structure)
-- [Using GPT 3.5](#using-gpt-35)
-- [Using Local Models with Ollama](#using-local-models-with-ollama)
-- [Contributing](#contributing)
-- [Support and Contact](#support-and-contact)
-- [License](#license)
-- [Analyzing for Improvements](#analyzing-for-improvements)
+- **User Management**
+  - Secure authentication system
+  - API key management
+  - User dashboard
+  - Website management
 
-## Quick Start Guide
+- **API Integration**
+  - RESTful API endpoints
+  - API key authentication
+  - Rate limiting
+  - Comprehensive documentation
+
+- **Security Features**
+  - JWT authentication
+  - CSRF protection
+  - Rate limiting
+  - Secure password handling
+  - Input validation
+
+- **Modern Architecture**
+  - Flask application factory pattern
+  - Blueprint-based organization
+  - SQLAlchemy ORM
+  - Redis caching (optional)
+  - Comprehensive logging
+
+## Tech Stack
+
+- **Backend**
+  - Flask
+  - SQLAlchemy
+  - Flask-Login
+  - Flask-Migrate
+  - Flask-Limiter
+  - Flask-CORS
+  - Flask-Caching
+
+- **Frontend Generation**
+  - Next.js 14
+  - Shadcn UI
+  - Tailwind CSS
+  - TypeScript
+
+- **AI/ML**
+  - CrewAI
+  - LangChain
+  - Multiple LLM support
+
+- **Database**
+  - SQLite (development)
+  - PostgreSQL (production)
+
+- **Caching**
+  - Redis (optional)
+
+## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/Innoteam.git
-   cd Innoteam
+   git clone https://github.com/yourusername/innoteam.git
+   cd innoteam
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
    ```bash
-   poetry lock && poetry install
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
    ```
 
-3. Set up environment variables:
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables:
    ```bash
    cp .env.example .env
-   # Edit .env with your API keys
+   # Edit .env with your configuration
    ```
 
-4. Run the application:
+5. Initialize the database:
    ```bash
-   python main.py
+   flask db upgrade
    ```
 
-## Detailed Setup Instructions
-
-### Prerequisites
-- Python 3.10 or higher
-- Poetry package manager
-- Node.js 18+ (for website)
-- Git
-
-### Environment Setup
-1. Configure API keys for:
-   - [Browserless](https://www.browserless.io/)
-   - [Serper](https://serper.dev/)
-   - [OpenAI](https://platform.openai.com/api-keys)
-
-2. Add Tailwind Templates:
-   - Place template folders in `./templates`
-   - Update references in `config/templates.json`
-
-### Development Environment
-1. Install Python dependencies:
+6. Run the application:
    ```bash
-   poetry install
+   python run.py
    ```
 
-2. Install website dependencies:
+## Development Setup
+
+1. Install development dependencies:
    ```bash
-   cd website
-   npm install
+   pip install -r requirements-dev.txt
    ```
 
-3. Start development servers:
-   - Backend:
-     ```bash
-     poetry run python main.py
-     ```
-   - Frontend:
-     ```bash
-     cd website
-     npm run dev
-     ```
-
-## CI/CD Pipeline
-
-Our project includes a comprehensive CI/CD pipeline using GitHub Actions that automates testing, building, and deployment processes.
-
-### Pipeline Features
-- Automated testing on every push and pull request
-- Automatic deployment to production for main branch
-- Separate deployment pipelines for frontend and backend
-- Built-in security checks and dependency updates
-
-### Pipeline Structure
-1. **Build and Test**
-   - Runs Python tests
-   - Builds frontend application
-   - Checks code quality
-
-2. **Backend Deployment (Heroku)**
-   - Automatically deploys to Heroku on main branch
-   - Handles database migrations
-   - Updates environment variables
-
-3. **Frontend Deployment (Vercel)**
-   - Deploys website to Vercel
-   - Optimizes assets
-   - Updates configurations
-
-## Deployment Guide
-
-### Backend Deployment (Heroku)
-1. Create a Heroku account
-2. Install Heroku CLI
-3. Create new Heroku app:
+2. Set up pre-commit hooks:
    ```bash
-   heroku create your-app-name
+   pre-commit install
    ```
-4. Add GitHub Secrets:
-   - HEROKU_API_KEY
-   - HEROKU_APP_NAME
-   - HEROKU_EMAIL
 
-### Frontend Deployment (Vercel)
-1. Create a Vercel account
-2. Link GitHub repository
-3. Add GitHub Secrets:
-   - VERCEL_TOKEN
-   - VERCEL_ORG_ID
-   - VERCEL_PROJECT_ID
+3. Run tests:
+   ```bash
+   pytest
+   ```
 
-### Manual Deployment
-If needed, you can manually deploy:
+4. Format code:
+   ```bash
+   black .
+   ```
 
-Backend:
-```bash
-git push heroku main
-```
+## API Documentation
 
-Frontend:
-```bash
-cd website
-vercel deploy
-```
+The API documentation is available at `/api/docs` when running the application. Key endpoints include:
+
+- `POST /api/v1/websites` - Generate a new website
+- `GET /api/v1/websites` - List all websites
+- `GET /api/v1/websites/<id>` - Get website details
+- `DELETE /api/v1/websites/<id>` - Delete a website
+- `POST /api/v1/websites/<id>/regenerate` - Regenerate a website
+
+## Environment Variables
+
+Key environment variables for configuration:
+
+- `FLASK_ENV` - Application environment (development/production)
+- `SECRET_KEY` - Flask secret key
+- `DATABASE_URL` - Database connection URL
+- `REDIS_URL` - Redis connection URL (optional)
+- `CLAUDE_API_KEY` - Claude API key
+- `SONNET_API_KEY` - Sonnet API key
+- `DEEPSEEK_API_KEY` - DeepSeek API key
+
+See `.env.example` for all available configuration options.
 
 ## Project Structure
+
 ```
-.
-├── .github/workflows/    # CI/CD configuration
-├── config/              # Configuration files
-├── main-files/          # Core application files
-├── tools/               # Utility tools
-├── website/             # Frontend application
-├── main.py             # Main application entry
-├── tasks.py            # Task definitions
-└── README.md           # Documentation
+innoteam/
+├── app/
+│   ├── api/            # API endpoints
+│   ├── auth/           # Authentication
+│   ├── core/           # Core functionality
+│   ├── models/         # Database models
+│   ├── templates/      # HTML templates
+│   ├── static/         # Static files
+│   └── utils/          # Utilities
+├── config/             # Configuration files
+├── logs/               # Application logs
+├── tests/              # Test suite
+├── .env                # Environment variables
+├── requirements.txt    # Dependencies
+└── run.py             # Application entry
 ```
 
-## CrewAI Framework
-CrewAI is designed to facilitate the collaboration of role-playing AI agents. In this example, these agents work together to transform an idea into a fully fleshed-out landing page by expanding the idea, choosing a template, and customizing it to fit the concept.
+## Contributing
 
-## Running the Script
-It uses GPT-4 by default so you should have access to that to run it.
-
-***Disclaimer:** This will use gpt-4 unless you changed it 
-not to, and by doing so it will cost you money (~2-9 USD).
+1. Fork the repository
 The full run might take around ~10-45m. Enjoy your time back*
 
 ## Using GPT 3.5
