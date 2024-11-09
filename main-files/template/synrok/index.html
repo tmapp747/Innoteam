@@ -18,6 +18,9 @@
   </head>
   <body class="dark-theme">
 
+    <!-- Skip to content link for screen readers -->
+    <a href="#main-content" class="skip-to-content-link">Skip to content</a>
+
     <!--page loader-->
     <div class="loader-wrapper">
       <div class="d-flex justify-content-center align-items-center position-absolute top-50 start-50 translate-middle">
@@ -31,13 +34,44 @@
    <!--start wrapper-->
     <div class="wrapper">
 
+      <!--start to header-->
+      <header class="top-header fixed-top border-bottom d-flex align-items-center" role="banner">
+        <nav class="navbar navbar-expand w-100 p-0 gap-3 align-items-center">
+          <div class="nav-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidenav"><a href="javascript:;" aria-label="Toggle navigation"><i class="bi bi-list"></i></a></div>
+          <div class="nav-button" onclick="history.back()"><a href="javascript:;" aria-label="Go back"><i class="bi bi-arrow-left"></i></a></div>
+          <div class="shop-category">
+            <h6 class="mb-0 fw-bold text-dark">Category</h6>
+          </div>
+          <form class="searchbar" role="search">
+            <div class="position-absolute top-50 translate-middle-y search-icon start-0 ms-4"><i class="bi bi-search"></i></div>
+            <input class="form-control px-5" type="text" placeholder="Search for anything" aria-label="Search">
+            <div class="position-absolute top-50 translate-middle-y end-0 search-close-icon me-4"><i class="bi bi-x-lg"></i></div>
+          </form>
+          <ul class="navbar-nav ms-auto d-flex align-items-center top-right-menu">
+            <li class="nav-item mobile-search-button">
+              <a class="nav-link" href="javascript:;" aria-label="Open search"><i class="bi bi-search"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="wishlist.html" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link position-relative" href="cart.html" aria-label="Cart">
+                <div class="cart-badge">8</div>
+                <i class="bi bi-bag"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <!--end to header-->
+
       <!--start to page content-->
-       <div class="page-content">
+       <div class="page-content" id="main-content">
 
         <div class="card rounded-0 border-0">
           <div class="card-body p-0">
              <div class="text-center">
-              <img class="img-fluid" src="assets/images/splash-screen-1.webp" alt=""/> 
+              <img class="img-fluid" src="assets/images/splash-screen-1.webp" alt="Splash Screen"/> 
              </div>
 
              <div class="text-center my-4">
@@ -45,7 +79,7 @@
                <p class="mb-0">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
              </div>
              <div class="d-grid">
-                <a href="authentication-splash-2.html" class="btn btn-dark btn-ecomm rounded-3">Get Started</a>   
+                <a href="authentication-splash-2.html" class="btn btn-dark btn-ecomm rounded-3" aria-label="Get Started">Get Started</a>   
              </div>
           </div>
         </div>
@@ -56,11 +90,11 @@
             <form id="model-selection-form" method="POST" action="/generate">
               <div class="mb-3">
                 <label for="idea" class="form-label">Idea</label>
-                <input type="text" class="form-control" id="idea" name="idea" required>
+                <input type="text" class="form-control" id="idea" name="idea" required aria-required="true">
               </div>
               <div class="mb-3">
                 <label for="llm" class="form-label">Select Model</label>
-                <select class="form-select" id="llm" name="llm" required>
+                <select class="form-select" id="llm" name="llm" required aria-required="true">
                   <option value="claude">Claude 3.5</option>
                   <option value="sonnet">Sonnet</option>
                   <option value="deepseek">Deep Seek</option>
@@ -68,10 +102,10 @@
               </div>
               <div class="mb-3">
                 <label for="api_key" class="form-label">API Key</label>
-                <input type="text" class="form-control" id="api_key" name="api_key" required>
+                <input type="text" class="form-control" id="api_key" name="api_key" required aria-required="true">
               </div>
               <div class="d-grid">
-                <button type="submit" class="btn btn-dark btn-ecomm rounded-3">Generate</button>
+                <button type="submit" class="btn btn-dark btn-ecomm rounded-3" aria-label="Generate">Generate</button>
               </div>
             </form>
           </div>
@@ -95,8 +129,8 @@
               <!-- Chat messages will be appended here -->
             </div>
             <div class="input-group mt-3">
-              <input type="text" class="form-control" id="chat-input" placeholder="Type a message...">
-              <button class="btn btn-dark" id="send-chat">Send</button>
+              <input type="text" class="form-control" id="chat-input" placeholder="Type a message..." aria-label="Chat input">
+              <button class="btn btn-dark" id="send-chat" aria-label="Send chat">Send</button>
             </div>
           </div>
         </div>
