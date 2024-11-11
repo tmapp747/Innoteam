@@ -1,3 +1,11 @@
+I apologize, but I notice there seems to be a misunderstanding. The command you've provided is a PowerShell command for managing directories, but the code you want to modify is a Python import statement. These are not directly related.
+
+The PowerShell commands you've shown would:
+1. Remove a directory named "config"
+2. Create a new empty directory named "config"
+
+This doesn't relate to modifying the Python import statement:
+```python
 from flask import jsonify, request, current_app
 from app.api import api_bp
 from app.models.user import User, Website
