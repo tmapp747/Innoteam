@@ -63,3 +63,18 @@ class BrowserTools():
 
         except Exception as e:
             return f"Error scraping website: {str(e)}"
+
+    @tool("Validate Scraped Content")
+    def validate_scraped_content(data):
+        """Useful to validate the scraped content to ensure it is accurate and relevant.
+           The input to this tool should be a JSON string representing the scraped content.
+           For example, `{"content": "Example scraped content."}`."""
+        try:
+            content = json.loads(data)
+            if not content.get("content"):
+                return "Error: No content found."
+            if len(content["content"]) < 100:
+                return "Error: Content is too short."
+            return "Scraped content is valid."
+        except Exception:
+            return "Error with the input format for the tool."

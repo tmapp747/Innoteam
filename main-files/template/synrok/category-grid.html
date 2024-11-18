@@ -20,6 +20,9 @@
   </head>
   <body>
 
+    <!-- Skip to content link for screen readers -->
+    <a href="#main-content" class="skip-to-content-link">Skip to content</a>
+
     <!--page loader-->
     <div class="loader-wrapper">
       <div class="d-flex justify-content-center align-items-center position-absolute top-50 start-50 translate-middle">
@@ -34,27 +37,27 @@
     <div class="wrapper">
 
        <!--start to header-->
-       <header class="top-header fixed-top border-bottom d-flex align-items-center">
+       <header class="top-header fixed-top border-bottom d-flex align-items-center" role="banner">
         <nav class="navbar navbar-expand w-100 p-0 gap-3 align-items-center">
-          <div class="nav-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidenav"><a href="javascript:;"><i class="bi bi-list"></i></a></div>
-            <div class="nav-button" onclick="history.back()"><a href="javascript:;"><i class="bi bi-arrow-left"></i></a></div>
+          <div class="nav-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidenav"><a href="javascript:;" aria-label="Toggle navigation"><i class="bi bi-list"></i></a></div>
+            <div class="nav-button" onclick="history.back()"><a href="javascript:;" aria-label="Go back"><i class="bi bi-arrow-left"></i></a></div>
             <div class="shop-category">
               <h6 class="mb-0 fw-bold text-dark">Category</h6>
             </div>
-            <form class="searchbar">
+            <form class="searchbar" role="search">
               <div class="position-absolute top-50 translate-middle-y search-icon start-0 ms-4"><i class="bi bi-search"></i></div>
-              <input class="form-control px-5" type="text" placeholder="Search for anything">
+              <input class="form-control px-5" type="text" placeholder="Search for anything" aria-label="Search">
               <div class="position-absolute top-50 translate-middle-y end-0 search-close-icon me-4"><i class="bi bi-x-lg"></i></div>
             </form>
             <ul class="navbar-nav ms-auto d-flex align-items-center top-right-menu">
               <li class="nav-item mobile-search-button">
-                <a class="nav-link" href="javascript:;"><i class="bi bi-search"></i></a>
+                <a class="nav-link" href="javascript:;" aria-label="Open search"><i class="bi bi-search"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="wishlist.html"><i class="bi bi-heart"></i></a>
+                <a class="nav-link" href="wishlist.html" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link position-relative" href="cart.html">
+                <a class="nav-link position-relative" href="cart.html" aria-label="Cart">
                   <div class="cart-badge">8</div>
                   <i class="bi bi-bag"></i>
                 </a>
@@ -65,7 +68,7 @@
         <!--end to header-->
 
       <!--start to page content-->
-       <div class="page-content">
+       <div class="page-content" id="main-content">
 
         <div class="row row-cols-2 g-3">
           <div class="col">

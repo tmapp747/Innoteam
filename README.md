@@ -1,93 +1,194 @@
-# AI Crew for Landing Pages
+<<<<<<< HEAD
+# Innodev Crew for Website Development
 ## Introduction
-This project is an example using the CrewAI framework to automate the process of creating landing pages from a single idea. CrewAI orchestrates autonomous AI agents, enabling them to collaborate and execute complex tasks efficiently.
+This project is an example using the Innodev Team framework to automate the process of creating landing pages from a single idea. CrewAI orchestrates autonomous AI agents, enabling them to collaborate and execute complex tasks efficiently.
+=======
+# Innoteam Website Generator
+>>>>>>> main
 
-*Disclaimer: Templates are not inlcuded as they are Tailwind templates. Place Tailwind individual template folders in `./templates`, if you have a lincese you can download them at (https://tailwindui.com/templates), their references are at `config/templates.json`, this was not tested this with other templates, prompts in `tasks.py` might require some changes for that to work.*
+A modern web application that generates websites using AI-powered agents and modern web technologies.
 
-By [@joaomdmoura](https://x.com/joaomdmoura)
+## Features
 
-- [CrewAI Framework](#crewai-framework)
-- [Running the script](#running-the-script)
-- [Details & Explanation](#details--explanation)
-- [Using GPT 3.5](#using-gpt-35)
-- [Using Local Models with Ollama](#using-local-models-with-ollama)
-- [Contributing](#contributing)
-- [Support and Contact](#support-and-contact)
-- [License](#license)
+- **AI-Powered Website Generation**
+  - Multiple LLM support (Claude, Sonnet, DeepSeek)
+  - Intelligent idea expansion and refinement
+  - Modern component generation using Next.js and Shadcn UI
+  - SEO-optimized content creation
 
-## CrewAI Framework
-CrewAI is designed to facilitate the collaboration of role-playing AI agents. In this example, these agents work together to transform an idea into a fully fleshed-out landing page by expanding the idea, choosing a template, and customizing it to fit the concept.
+- **User Management**
+  - Secure authentication system
+  - API key management
+  - User dashboard
+  - Website management
 
-## Running the Script
-It uses GPT-4 by default so you should have access to that to run it.
+- **API Integration**
+  - RESTful API endpoints
+  - API key authentication
+  - Rate limiting
+  - Comprehensive documentation
 
-***Disclaimer:** This will use gpt-4 unless you changed it 
-not to, and by doing so it will cost you money (~2-9 USD).
-The full run might take around ~10-45m. Enjoy your time back*
+- **Security Features**
+  - JWT authentication
+  - CSRF protection
+  - Rate limiting
+  - Secure password handling
+  - Input validation
 
-- **Configure Environment**: Set up the environment variables for [Browseless](https://www.browserless.io/), [Serper](https://serper.dev/) and [OpenAI](https://platform.openai.com/api-keys)
-- **Install Dependencies**: Run `poetry lock && poetry install`.
-- **Add Tailwind Templates**: Place Tailwind individual template folders in `./templates`, if you have a linces you can download them at (https://tailwindui.com/templates), their references are at `config/templates.json`, I haven't tested this with other templates, prompts in `tasks.py` might require some changes for that to work.
-- **Execute the Script**: Run `python main.py` and input your idea.
+- **Modern Architecture**
+  - Flask application factory pattern
+  - Blueprint-based organization
+  - SQLAlchemy ORM
+  - Redis caching (optional)
+  - Comprehensive logging
 
-## Details & Explanation
-- **Running the Script**: Execute `python main.py`` and input your idea when prompted. The script will leverage the CrewAI framework to process the idea and generate a landing page.
-- **Output**: The generated landing page will be zipped in the a `workdir.zip` file you can download.
-- **Key Components**:
-  - `./app.py`: Main script file.
-  - `./tasks.py`: Main file with the tasks prompts.
-  - `./tools`: Contains tool classes used by the agents.
-  - `./config`: Configuration files for agents.
-  - `./templates`: Directory to store Tailwind templates (not included).
+## Tech Stack
 
-## Using GPT 3.5
-CrewAI allow you to pass an llm argument to the agent construtor, that will be it's brain, so changing the agent to use GPT-3.5 instead of GPT-4 is as simple as passing that argument on the agent you want to use that LLM (in `main.py`).
-```python
-from langchain.chat_models import ChatOpenAI
+- **Backend**
+  - Flask
+  - SQLAlchemy
+  - Flask-Login
+  - Flask-Migrate
+  - Flask-Limiter
+  - Flask-CORS
+  - Flask-Caching
 
-llm = ChatOpenAI(model='gpt-3.5') # Loading GPT-3.5
+- **Frontend Generation**
+  - Next.js 14
+  - Shadcn UI
+  - Tailwind CSS
+  - TypeScript
 
-self.idea_analyst = Agent(
-    **idea_analyst_config,
-    verbose=True,
-    llm=llm, # <----- passing our llm reference here
-    tools=[
-        SearchTools.search_internet,
-        BrowserTools.scrape_and_summarize_kwebsite
-    ]
-)
+- **AI/ML**
+  - CrewAI
+  - LangChain
+  - Multiple LLM support
+
+- **Database**
+  - SQLite (development)
+  - PostgreSQL (production)
+
+- **Caching**
+  - Redis (optional)
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+```bash
+   git clone https://github.com/yourusername/innoteam.git
+   cd innoteam
+   ```  
+
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
+  ```plaintext
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+5. Initialize the database:
+   ```bash
+   flask db upgrade
+   ```
+
+6. Run the application:
+   ```bash
+   python run.py
+   ```
+
+## Development Setup
+
+1. Install development dependencies:
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+2. Set up pre-commit hooks:
+   ```bash
+   pre-commit install
+   ```
+
+3. Run tests:
+   ```bash
+   pytest
+   ```
+
+4. Format code:
+   ```bash
+   black .
+   ```
+
+## API Documentation
+
+The API documentation is available at `/api/docs` when running the application. Key endpoints include:
+
+- `POST /api/v1/websites` - Generate a new website
+- `GET /api/v1/websites` - List all websites
+- `GET /api/v1/websites/<id>` - Get website details
+- `DELETE /api/v1/websites/<id>` - Delete a website
+- `POST /api/v1/websites/<id>/regenerate` - Regenerate a website
+
+## Environment Variables
+
+Key environment variables for configuration:
+
+- `FLASK_ENV` - Application environment (development/production)
+- `SECRET_KEY` - Flask secret key
+- `DATABASE_URL` - Database connection URL
+- `REDIS_URL` - Redis connection URL (optional)
+- `CLAUDE_API_KEY` - Claude API key
+- `SONNET_API_KEY` - Sonnet API key
+- `DEEPSEEK_API_KEY` - DeepSeek API key
+
+See `.env.example` for all available configuration options.
+
+## Project Structure
+
+```
+innoteam/
+├── app/
+│   ├── api/            # API endpoints
+│   ├── auth/           # Authentication
+│   ├── core/           # Core functionality
+│   ├── models/         # Database models
+│   ├── templates/      # HTML templates
+│   ├── static/         # Static files
+│   └── utils/          # Utilities
+├── config/             # Configuration files
+├── logs/               # Application logs
+├── tests/              # Test suite
+├── .env                # Environment variables
+├── requirements.txt    # Dependencies
+└── run.py             # Application entry
 ```
 
-## Using Local Models with Ollama
-The CrewAI framework supports integration with local models, such as Ollama, for enhanced flexibility and customization. This allows you to utilize your own models, which can be particularly useful for specialized tasks or data privacy concerns.
+## Contributing
 
-### Setting Up Ollama
-- **Install Ollama**: Ensure that Ollama is properly installed in your environment. Follow the installation guide provided by Ollama for detailed instructions.
-- **Configure Ollama**: Set up Ollama to work with your local model. You will probably need to tweak the model using a Modelfile, an example of which is provided in the root folder (Openhermes25Modelfile) for the OpenHermes2.5 which is super light and works great. You can use the Modelfile once you have the model installed with `ollama create agent -f OpenHermes25Modelfile`.
-
-### Integrating Ollama with CrewAI
-- Instantiate Ollama Model: Create an instance of the Ollama model. You can specify the model and the base URL during instantiation. For example:
-
-```python
-from langchain.llms import Ollama
-ollama_openhermes = Ollama(model="agent")
-# Pass Ollama Model to Agents: When creating your agents within the CrewAI framework, you can pass the Ollama model as an argument to the Agent constructor. For instance:
-
-self.idea_analyst = Agent(
-    **idea_analyst_config,
-    verbose=True,
-    llm=ollama_openhermes, # Ollama model passed here
-    tools=[
-        SearchTools.search_internet,
-        BrowserTools.scrape_and_summarize_website
-    ]
-)
-```
-
-### Advantages of Using Local Models
-- **Privacy**: Local models allow processing of data within your own infrastructure, ensuring data privacy.
-- **Customization**: You can customize the model to better suit the specific needs of your tasks.
-- **Performance**: Depending on your setup, local models can offer performance benefits, especially in terms of latency.
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
-This project is released under the MIT License.
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+

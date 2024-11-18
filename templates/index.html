@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innoteam - Website Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Website Generator</h1>
+        <div class="card">
+            <div class="card-body">
+                <form action="/generate" method="POST">
+                    <div class="form-group">
+                        <label for="idea">Describe your website idea:</label>
+                        <textarea class="form-control" id="idea" name="idea" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="llm">Select AI Model:</label>
+                        <select class="form-control" id="llm" name="llm">
+                            <option value="claude">Claude</option>
+                            <option value="sonnet">Sonnet</option>
+                            <option value="deepseek">DeepSeek</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="api_key">API Key:</label>
+                        <input type="password" class="form-control" id="api_key" name="api_key">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Website</button>
+                </form>
+            </div>
+        </div>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">${data.message}</div>
+                        <div class="card mt-3">
+                            <div class="card-header">Conversation Log</div>
+                            <div class="card-body">
+                                <pre>${JSON.stringify(data.conversation_log, null, 2)}</pre>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

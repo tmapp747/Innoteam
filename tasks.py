@@ -1,170 +1,202 @@
 from textwrap import dedent
 
-
 class TaskPrompts():
-  def expand():
-    return dedent("""
-      THIS IS A GREAT IDEA! Analyze and expand it 
-      by conducting a comprehensive research.
-  
-      Final answer MUST be a comprehensive idea report 
-      detailing why this is a great idea, the value 
-      proposition, unique selling points, why people should 
-      care about it and distinguishing features. 
-  
-       IDEA: 
-      ----------
-      {idea}
-    """)
-
-  def refine_idea():
-    return dedent("""
-      Expand idea report with a Why, How, and What 
-      messaging strategy using the Golden Circle 
-      Communication technique, based on the idea report.
-      
-      Your final answer MUST be the updated complete 
-      comprehensive idea report with WHY, HOW, WHAT, 
-      a core message, key features and supporting arguments.
-      
-      YOU MUST RETURN THE COMPLETE IDEA REPORT AND 
-      THE DETAILS, You'll get a $100 tip if you do your best work!
-    """)
-
-  def choose_template():
-    return dedent("""
-      Learn the templates options choose and copy 
-      the one that suits the idea bellow the best, 
-      YOU MUST COPY, and then YOU MUST read the src/component 
-      in the directory you just copied, to decide what 
-      component files should be updated to make the 
-      landing page about the idea bellow.
-      
-      - YOU MUST READ THE DIRECTORY BEFORE CHOSING THE FILES.      
-      - YOU MUST NOT UPDATE any Pricing components.
-      - YOU MUST UPDATE ONLY the 4 most important components.
-      
-      Your final answer MUST be ONLY a JSON array of 
-      components full file paths that need to be updated.
-
-      IDEA 
-      ----------
-      {idea}
-    """)
-
-  def update_page():
-    return dedent("""
-      READ the ./[choosen_template]/src/app/page.jsx OR
-      ./[choosen_template]/src/app/(main)/page.jsx (main with the parenthesis) 
-      to learn its content and then write an updated 
-      version to the filesystem that removes any 
-      section related components that are not in our 
-      list from the returns. Keep the imports.
-      
-      Final answer MUST BE ONLY a valid json list with 
-      the full path of each of the components we will be 
-      using, the same way you got them.
-
-      RULES
-      -----
-      - NEVER ADD A FINAL DOT to the file content.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Save the file as with `.jsx` extension.
-      - Return the same valid JSON list of the components your got.
-
-      You'll get a $100 tip if you follow all the rules!
-
-      Also update any necessary text to reflect this landing page
-      is about the idea bellow.
-      
-      IDEA 
-      ----------
-      {idea}
-    """)
-
-  def component_content():
-    return dedent("""
-      A engineer will update the {component} (code bellow),
-      return a list of good options of texts to replace 
-      EACH INDIVIDUAL existing text on the component, 
-      the suggestion MUST be based on the idea bellow, 
-      and also MUST be similar in length with the original 
-      text, we need to replace ALL TEXT.
-      
-      NEVER USE Apostrophes for contraction! You'll get a $100 
-      tip if you do your best work!
-
-      IDEA 
-      -----
-      {expanded_idea}
-  
-      REACT COMPONENT CONTENT
-      -----
-      {file_content}
-    """)
-
-  def update_component():
-    return dedent("""
-      YOU MUST USE the tool to write an updated 
-      version of the react component to the file 
-      system in the following path: {component} 
-      replacing the text content with the suggestions 
-      provided.
-      
-      You only modify the text content, you don't add 
-      or remove any components.
-      
-      You first write the file then your final answer 
-      MUST be the updated component content.
-
-      RULES
-      -----
-      - Remove all the links, this should be single page landing page.
-      - Don't make up images, videos, gifs, icons, logos, etc.
-      - keep the same style and tailwind classes.
-      - MUST HAVE `'use client'` at the be beginning of the code.
-      - href in buttons, links and navigations should be `#`.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - Keep the same component imports and don't use new components.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Save the file as with `.jsx` extension.
-
-      If you follow the rules I'll give you a $100 tip!!! 
-      MY LIFE DEPEND ON YOU FOLLOWING IT!
-  
-      CONTENT TO BE UPDATED
-      -----
-      {file_content}
-    """)
-
-  def qa_component():
-    return dedent("""
-      Check the React component code to make sure 
-      it's valid and abide by the rules bellow, 
-      if it doesn't then write the correct version to 
-      the file system using the write file tool into 
-      the following path: {component}.
+    def expand():
+        return dedent("""
+            Analyze and expand this idea by conducting comprehensive research.
     
-      Your final answer should be a confirmation that 
-      the component is valid and abides by the rules and if
-      you had to write an updated version to the file system.
+            Final answer MUST be a comprehensive idea report detailing:
+            - Value proposition
+            - Target audience
+            - Unique selling points
+            - Key features and benefits
+            - Brand voice and tone
+            - Visual design direction
+            - Color scheme preferences
+            - User experience goals
+    
+            IDEA: 
+            ----------
+            {idea}
+        """)
 
-      RULES
-      -----
-      - NEVER USE Apostrophes for contraction!
-      - ALL COMPONENTS USED SHOULD BE IMPORTED.
-      - MUST HAVE `'use client'` at the be beginning of the code.
-      - href in buttons, links and navigations should be `#`.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Always use `export function` for the component class.
+    def refine_idea():
+        return dedent("""
+            Expand idea report with a Why, How, and What messaging 
+            strategy using the Golden Circle Communication technique.
+            
+            Your final answer MUST include:
+            - Complete idea report
+            - WHY: Core purpose and beliefs
+            - HOW: Unique approach and methods
+            - WHAT: Products/services offered
+            - Core message
+            - Key features
+            - Supporting arguments
+            - Visual design recommendations
+            - User interface guidelines
+            
+            Focus on modern web design principles and user experience.
+        """)
 
-      You'll get a $100 tip if you follow all the rules!
-    """)
+    def setup_project():
+        return dedent("""
+            Set up a modern web development project with the following stack:
+            
+            1. Next.js 14 with App Router
+            2. Shadcn UI for components
+            3. Tailwind CSS for styling
+            4. TypeScript for type safety
+            
+            Project Structure:
+            /website
+                /app
+                    /components
+                    /lib
+                    /styles
+                    /types
+                    layout.tsx
+                    page.tsx
+                /public
+                    /images
+                package.json
+                tailwind.config.js
+                tsconfig.json
+                
+            Initialize with:
+            1. Git repository
+            2. Proper TypeScript configuration
+            3. Tailwind CSS setup
+            4. Shadcn UI components
+            5. ESLint and Prettier
+            6. Responsive design utilities
+            
+            Ensure all modern development practices are followed.
+        """)
+
+    def create_components():
+        return dedent("""
+            Create modern, responsive website components based on the expanded idea.
+            
+            Requirements:
+            1. Use Shadcn UI components
+            2. Implement responsive design with Tailwind CSS
+            3. Create reusable components
+            4. Add modern animations and transitions
+            5. Ensure accessibility (WCAG compliance)
+            6. Implement dark mode
+            7. Optimize performance
+            
+            Components to create:
+            - Navigation (responsive with mobile menu)
+            - Hero section (with animations)
+            - Features grid
+            - About section
+            - Testimonials
+            - Contact form
+            - Footer
+            
+            Use modern React patterns and best practices.
+        """)
+
+    def create_content():
+        return dedent("""
+            Create compelling website content based on the expanded idea.
+            
+            Content Requirements:
+            1. SEO-optimized headlines
+            2. Engaging call-to-actions
+            3. Clear value propositions
+            4. Feature descriptions
+            5. About section content
+            6. Contact form copy
+            7. Meta descriptions
+            
+            Follow modern web content principles:
+            - Clear hierarchy
+            - Scannable text
+            - Active voice
+            - Emotional triggers
+            - Social proof
+            - Trust signals
+            
+            Ensure content aligns with modern design aesthetics.
+        """)
+
+    def implement_features():
+        return dedent("""
+            Implement modern website features and functionality.
+            
+            Features to implement:
+            1. Smooth scroll navigation
+            2. Responsive images and layouts
+            3. Dark mode toggle
+            4. Loading animations
+            5. Form validation
+            6. Interactive components
+            7. Performance optimization
+            
+            Technical Requirements:
+            - Use React hooks effectively
+            - Implement proper state management
+            - Ensure type safety with TypeScript
+            - Follow accessibility guidelines
+            - Optimize for Core Web Vitals
+            - Implement error boundaries
+            - Add proper loading states
+        """)
+
+    def qa_review():
+        return dedent("""
+            Review the website for quality assurance.
+            
+            Check for:
+            1. Responsive design across devices
+            2. Performance metrics
+            3. Accessibility compliance
+            4. Cross-browser compatibility
+            5. Loading states
+            6. Error handling
+            7. Content accuracy
+            8. Visual consistency
+            9. Interactive features
+            10. SEO optimization
+            
+            Provide detailed feedback for improvements.
+        """)
+
+    def optimize():
+        return dedent("""
+            Optimize the website for performance and user experience.
+            
+            Optimization areas:
+            1. Image optimization
+            2. Code splitting
+            3. Lazy loading
+            4. CSS optimization
+            5. JavaScript bundle size
+            6. Server-side rendering
+            7. Caching strategies
+            8. API response times
+            
+            Focus on Core Web Vitals:
+            - Largest Contentful Paint
+            - First Input Delay
+            - Cumulative Layout Shift
+            
+            Provide metrics and improvement suggestions.
+        """)
+
+    def analyze_improvements():
+        return dedent("""
+            Analyze the project for potential improvements.
+            
+            Steps to follow:
+            1. Review code quality
+            2. Identify performance bottlenecks
+            3. Check for security vulnerabilities
+            4. Evaluate user experience
+            5. Update dependencies
+            
+            Provide a detailed report with suggestions for enhancements.
+        """)

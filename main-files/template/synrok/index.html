@@ -16,7 +16,10 @@
     <link href="assets/css/style.css" rel="stylesheet"/>
     <link href="assets/css/dark-theme.css" rel="stylesheet"/>
   </head>
-  <body>
+  <body class="dark-theme">
+
+    <!-- Skip to content link for screen readers -->
+    <a href="#main-content" class="skip-to-content-link">Skip to content</a>
 
     <!--page loader-->
     <div class="loader-wrapper">
@@ -31,13 +34,44 @@
    <!--start wrapper-->
     <div class="wrapper">
 
+      <!--start to header-->
+      <header class="top-header fixed-top border-bottom d-flex align-items-center" role="banner">
+        <nav class="navbar navbar-expand w-100 p-0 gap-3 align-items-center">
+          <div class="nav-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidenav"><a href="javascript:;" aria-label="Toggle navigation"><i class="bi bi-list"></i></a></div>
+          <div class="nav-button" onclick="history.back()"><a href="javascript:;" aria-label="Go back"><i class="bi bi-arrow-left"></i></a></div>
+          <div class="shop-category">
+            <h6 class="mb-0 fw-bold text-dark">Category</h6>
+          </div>
+          <form class="searchbar" role="search">
+            <div class="position-absolute top-50 translate-middle-y search-icon start-0 ms-4"><i class="bi bi-search"></i></div>
+            <input class="form-control px-5" type="text" placeholder="Search for anything" aria-label="Search">
+            <div class="position-absolute top-50 translate-middle-y end-0 search-close-icon me-4"><i class="bi bi-x-lg"></i></div>
+          </form>
+          <ul class="navbar-nav ms-auto d-flex align-items-center top-right-menu">
+            <li class="nav-item mobile-search-button">
+              <a class="nav-link" href="javascript:;" aria-label="Open search"><i class="bi bi-search"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="wishlist.html" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link position-relative" href="cart.html" aria-label="Cart">
+                <div class="cart-badge">8</div>
+                <i class="bi bi-bag"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <!--end to header-->
+
       <!--start to page content-->
-       <div class="page-content">
+       <div class="page-content" id="main-content">
 
         <div class="card rounded-0 border-0">
           <div class="card-body p-0">
              <div class="text-center">
-              <img class="img-fluid" src="assets/images/splash-screen-1.webp" alt=""/> 
+              <img class="img-fluid" src="assets/images/splash-screen-1.webp" alt="Splash Screen"/> 
              </div>
 
              <div class="text-center my-4">
@@ -45,8 +79,77 @@
                <p class="mb-0">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
              </div>
              <div class="d-grid">
-                <a href="authentication-splash-2.html" class="btn btn-dark btn-ecomm rounded-3">Get Started</a>   
+                <a href="authentication-splash-2.html" class="btn btn-dark btn-ecomm rounded-3" aria-label="Get Started">Get Started</a>   
              </div>
+          </div>
+        </div>
+
+        <!-- Add form for selecting models and entering API keys -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <form id="model-selection-form" method="POST" action="/generate">
+              <div class="mb-3">
+                <label for="idea" class="form-label">Idea</label>
+                <input type="text" class="form-control" id="idea" name="idea" required aria-required="true">
+              </div>
+              <div class="mb-3">
+                <label for="llm" class="form-label">Select Model</label>
+                <select class="form-select" id="llm" name="llm" required aria-required="true">
+                  <option value="claude">Claude 3.5</option>
+                  <option value="sonnet">Sonnet</option>
+                  <option value="deepseek">Deep Seek</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="api_key" class="form-label">API Key</label>
+                <input type="text" class="form-control" id="api_key" name="api_key" required aria-required="true">
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-ecomm rounded-3" aria-label="Generate">Generate</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Add conversation log section -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Conversation Log</h5>
+            <div id="conversation-log" class="conversation-log" style="max-height: 300px; overflow-y: auto;">
+              <!-- Conversation messages will be appended here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Add chat interface section -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Chat Interface</h5>
+            <div id="chat-interface" class="chat-interface" style="max-height: 300px; overflow-y: auto;">
+              <!-- Chat messages will be appended here -->
+            </div>
+            <div class="input-group mt-3">
+              <input type="text" class="form-control" id="chat-input" placeholder="Type a message..." aria-label="Chat input">
+              <button class="btn btn-dark" id="send-chat" aria-label="Send chat">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add collapsible conversation sections -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0">
+            <h5 class="text-dark fw-bold">Collapsible Conversation Sections</h5>
+            <div id="collapsible-sections" class="accordion" style="max-height: 300px; overflow-y: auto;">
+              <!-- Collapsible sections will be appended here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Add branding for innodev team from innovate hub -->
+        <div class="card rounded-0 border-0 mt-4">
+          <div class="card-body p-0 text-center">
+            <h5 class="text-dark fw-bold">Innodev Team from Innovate Hub</h5>
+            <img src="assets/images/placeholder-logo.png" alt="Innodev Team Logo" class="img-fluid" style="max-width: 150px;">
           </div>
         </div>
 
@@ -64,5 +167,81 @@
 
     <script src="assets/js/loader.js"></script>
    
+    <!-- Add script to handle conversation log display -->
+    <script>
+      document.getElementById('model-selection-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        fetch('/generate', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          const conversationLog = document.getElementById('conversation-log');
+          conversationLog.innerHTML = '';
+          data.conversation_log.forEach(log => {
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry');
+            logEntry.innerHTML = `<strong>${log.agent} (${log.role})</strong> [${log.timestamp}]: ${log.message}`;
+            conversationLog.appendChild(logEntry);
+          });
+
+          // Update chat interface
+          const chatInterface = document.getElementById('chat-interface');
+          chatInterface.innerHTML = '';
+          data.conversation_log.forEach(log => {
+            const chatMessage = document.createElement('div');
+            chatMessage.classList.add('chat-message');
+            chatMessage.innerHTML = `<strong>${log.agent} (${log.role})</strong>: ${log.message}`;
+            chatInterface.appendChild(chatMessage);
+          });
+
+          // Update collapsible sections
+          const collapsibleSections = document.getElementById('collapsible-sections');
+          collapsibleSections.innerHTML = '';
+          const tasks = {};
+          data.conversation_log.forEach(log => {
+            if (!tasks[log.task]) {
+              tasks[log.task] = [];
+            }
+            tasks[log.task].push(log);
+          });
+          Object.keys(tasks).forEach(task => {
+            const section = document.createElement('div');
+            section.classList.add('accordion-item');
+            section.innerHTML = `
+              <h2 class="accordion-header" id="heading-${task}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${task}" aria-expanded="true" aria-controls="collapse-${task}">
+                  ${task}
+                </button>
+              </h2>
+              <div id="collapse-${task}" class="accordion-collapse collapse show" aria-labelledby="heading-${task}" data-bs-parent="#collapsible-sections">
+                <div class="accordion-body">
+                  ${tasks[task].map(log => `<strong>${log.agent} (${log.role})</strong>: ${log.message}`).join('<br>')}
+                </div>
+              </div>
+            `;
+            collapsibleSections.appendChild(section);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+      });
+
+      // Handle chat input
+      document.getElementById('send-chat').addEventListener('click', function() {
+        const chatInput = document.getElementById('chat-input');
+        const message = chatInput.value;
+        if (message.trim() !== '') {
+          const chatInterface = document.getElementById('chat-interface');
+          const chatMessage = document.createElement('div');
+          chatMessage.classList.add('chat-message');
+          chatMessage.innerHTML = `<strong>User</strong>: ${message}`;
+          chatInterface.appendChild(chatMessage);
+          chatInput.value = '';
+        }
+      });
+    </script>
+
   </body>
 </html>
